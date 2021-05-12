@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>OpenLambda - misc</title><link href="https://open-lambda.org/" rel="alternate"></link><link href="https://open-lambda.org/feeds/misc.atom.xml" rel="self"></link><id>https://open-lambda.org/</id><updated>2021-05-12T11:11:00+12:00</updated><entry><title>OpenLambda</title><link href="https://open-lambda.org/openlambda.html" rel="alternate"></link><published>2021-05-12T11:11:00+12:00</published><updated>2021-05-12T11:11:00+12:00</updated><author><name>open-lambda</name></author><id>tag:open-lambda.org,2021-05-12:/openlambda.html</id><summary type="html">&lt;h1&gt;OpenLambda&lt;/h1&gt;
+&lt;p&gt;OpenLambda is an Apache-licensed serverless computing project, written
+in Go and based on Linux containers.  The primary goal of OpenLambda
+is to enable exploration of new approaches to serverless computing.  Our
+research agenda is described in more detail in a &lt;a href="https://www.usenix.org/system/files/conference/hotcloud16/hotcloud16_hendrickson.pdf"&gt;HotCloud '16
+paper&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;Getting Started&lt;/h2&gt;
+&lt;p&gt;OpenLambda relies heavily on …&lt;/p&gt;</summary><content type="html">&lt;h1&gt;OpenLambda&lt;/h1&gt;
+&lt;p&gt;OpenLambda is an Apache-licensed serverless computing project, written
+in Go and based on Linux containers.  The primary goal of OpenLambda
+is to enable exploration of new approaches to serverless computing.  Our
+research agenda is described in more detail in a &lt;a href="https://www.usenix.org/system/files/conference/hotcloud16/hotcloud16_hendrickson.pdf"&gt;HotCloud '16
+paper&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;Getting Started&lt;/h2&gt;
+&lt;p&gt;OpenLambda relies heavily on operations that require root
+privilege. To simplify this, we suggest that you run all commands as
+the root user.  OpenLambda is only actively tested on Ubuntu 16.04 LTS.&lt;/p&gt;
+&lt;h3&gt;Build and Test&lt;/h3&gt;
+&lt;p&gt;OL is changing rapidly.  We recommend syncing to a commit that passed our nightly tests: https://s3.us-east-2.amazonaws.com/open-lambda-public/tests.html.&lt;/p&gt;
+&lt;p&gt;Our tests run on a VM built with this init script:
+https://github.com/open-lambda/testing/blob/master/dev-build/bootstrap2.sh.
+Thus, you can consider that file testable documentation of the
+dependencies.&lt;/p&gt;
+&lt;p&gt;You can build the &lt;code&gt;ol&lt;/code&gt; and other resources with just &lt;code&gt;make&lt;/code&gt;.  Then make sure it works with some simple tests:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;make test-all
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Getting Started&lt;/h3&gt;
+&lt;p&gt;You can create a new OL environment with the following comment:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;./ol new
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This creates a directory named &lt;code&gt;default&lt;/code&gt; with various OL resources.
+You can create an OL environment at another location by passing a
+&lt;code&gt;-path=DIRNAME&lt;/code&gt; to the &lt;code&gt;new&lt;/code&gt; command.&lt;/p&gt;
+&lt;p&gt;Default config settings were saved to &lt;code&gt;./default/config.json&lt;/code&gt;.  Modify
+them if you wish, then start an OL worker (if you used &lt;code&gt;-path&lt;/code&gt; above,
+use it again with the &lt;code&gt;worker&lt;/code&gt; command):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;./ol worker
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In another terminal, make sure the worker is running with &lt;code&gt;./ol status&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Now save the following to &lt;code&gt;./default/registry/echo.py&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;f&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;event&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;event&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now invoke your lambda (the result should be the same as the POST body):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;curl -X POST localhost:5000/run/echo -d &amp;#39;{&amp;quot;hello&amp;quot;: &amp;quot;world&amp;quot;}&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;When you're done, just kill the worker with &lt;code&gt;ctrl-C&lt;/code&gt;.  If you want to
+run the worker in detached mode (i.e., in the background), just start
+it again with the &lt;code&gt;-d&lt;/code&gt; flag:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;./ol worker -d
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You can shutdown a detached worker like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;./ol kill
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;License&lt;/h2&gt;
+&lt;p&gt;This project is licensed under the Apache License - see the &lt;a href="LICENSE.md"&gt;LICENSE.md&lt;/a&gt; file for details.&lt;/p&gt;</content><category term="misc"></category></entry></feed>
