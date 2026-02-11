@@ -69,16 +69,3 @@ root: index
 chapters:
   - file: worker
 ```
-
-3. Push — the site rebuilds automatically.
-
----
-
-## Troubleshooting
-
-| Problem | Fix |
-|---|---|
-| Build fails: `jupyter-book not found` | Make sure `requirements.txt` lists `jupyter-book>=1.0.0` |
-| Pages shows 404 | Confirm **Settings → Pages → Source** is set to **GitHub Actions** |
-| Old content still showing | Hard-refresh browser (`Ctrl+Shift+R`) or wait ~1 min for CDN |
-| Action fails with permissions error | Go to **Settings → Actions → General → Workflow permissions** and enable "Read and write permissions" |
