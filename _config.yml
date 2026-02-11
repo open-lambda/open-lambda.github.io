@@ -1,0 +1,57 @@
+# Book settings — https://jupyterbook.org/customize/config.html
+title: OpenLambda
+author: OpenLambda Contributors
+logo: ""
+
+# Force re-execution of notebooks on each build
+execute:
+  execute_notebooks: "off"
+
+# HTML-specific settings
+html:
+  use_issues_button: true
+  use_repository_button: true
+  use_edit_page_button: false
+  home_page_in_navbar: false
+  extra_footer: |
+    <p>Licensed under the <a href="https://opensource.org/licenses/Apache-2.0">Apache 2.0 License</a>.
+    Built with <a href="https://jupyterbook.org">Jupyter Book</a> and MyST Markdown.</p>
+
+# Repository info (used for issue/edit buttons)
+repository:
+  url: https://github.com/open-lambda/open-lambda.github.io
+  branch: main
+  path_to_book: "."
+
+# MyST extensions
+parse:
+  myst_enable_extensions:
+    - colon_fence
+    - deflist
+    - dollarmath
+    - fieldlist
+    - html_admonition
+    - html_image
+    - linkify
+    - replacements
+    - smartquotes
+    - strikethrough
+    - substitution
+    - tasklist
+  myst_url_schemes: [mailto, http, https]
+  myst_dmath_double_inline: true
+
+# Sphinx configuration
+sphinx:
+  config:
+    html_theme: "sphinx_book_theme"
+    html_show_sourcelink: false
+    html_theme_options:
+      repository_url: "https://github.com/open-lambda/open-lambda.github.io"
+      use_issues_button: true
+      use_repository_button: true
+      use_download_button: false
+      navigation_depth: 2
+      show_navbar_depth: 1
+      logo:
+        text: "OpenLambda"
