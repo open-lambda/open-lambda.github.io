@@ -1,7 +1,6 @@
-# Book settings — https://jupyterbook.org/customize/config.html
+# Book settings - https://jupyterbook.org/customize/config.html
 title: OpenLambda
-author: OpenLambda Contributors
-logo: ""
+author: OpenLambda
 
 # Force re-execution of notebooks on each build
 execute:
@@ -20,10 +19,10 @@ html:
 # Repository info (used for issue/edit buttons)
 repository:
   url: https://github.com/open-lambda/open-lambda.github.io
-  branch: main
+  branch: master
   path_to_book: "."
 
-# MyST extensions
+# MyST extensions - single parse block (duplicate was causing only the first to be read)
 parse:
   myst_enable_extensions:
     - colon_fence

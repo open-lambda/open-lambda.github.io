@@ -1,7 +1,7 @@
 ---
 myst:
   html_meta:
-    description: "OpenLambda — Apache-licensed serverless computing built on Linux containers"
+    description: "OpenLambda - Apache-licensed serverless computing built on Linux containers"
     keywords: "serverless, OpenLambda, Go, Linux containers, cloud computing"
 ---
 
@@ -61,5 +61,5 @@ manually deploy workers yourself and put an HTTP load balancer in front of them.
 
 ## License
 
-This project is licensed under the **Apache License** — see the
+This project is licensed under the **Apache License** - see the
 [LICENSE.md](https://github.com/open-lambda/open-lambda/blob/main/LICENSE) file for details.
