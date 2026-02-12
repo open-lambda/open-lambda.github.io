@@ -1,7 +1,7 @@
 # OpenLambda GitHub Pages — MyST Markdown Site
 
 This repo deploys automatically to GitHub Pages using [Jupyter Book](https://jupyterbook.org)
-with [MyST Markdown](https://myst-parser.readthedocs.io/).
+with [MyST Markdown](https://myst-parser.readthedocs.io/) as the technical documentation of Open Lambda.
 
 ---
 
