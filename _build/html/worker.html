@@ -7,10 +7,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="OpenLambda — Apache-licensed serverless computing built on Linux containers" name="description" />
-<meta content="serverless, OpenLambda, Go, Linux containers, cloud computing" name="keywords" />
 
-    <title>OpenLambda &#8212; OpenLambda</title>
+    <title>Worker &#8212; OpenLambda</title>
   
   
   
@@ -59,10 +57,10 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'worker';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Worker" href="worker.html" />
+    <link rel="prev" title="OpenLambda" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -125,8 +123,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -145,7 +141,7 @@
     
   
 
-<a class="navbar-brand logo" href="#">
+<a class="navbar-brand logo" href="index.html">
   
   
   
@@ -168,8 +164,8 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="worker.html">Worker</a></li>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Worker</a></li>
 </ul>
 
     </div>
@@ -241,7 +237,7 @@
       
       
       
-      <li><a href="https://github.com/open-lambda/open-lambda.github.io/issues/new?title=Issue%20on%20page%20%2Findex.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/open-lambda/open-lambda.github.io/issues/new?title=Issue%20on%20page%20%2Fworker.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -307,7 +303,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>OpenLambda</h1>
+    <h1>Worker</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -317,8 +313,11 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#related-publications">Related Publications</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration">Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#starting-the-worker">Starting the Worker</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deploying-multiple-workers">Deploying Multiple Workers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
 </ul>
             </nav>
         </div>
@@ -330,72 +329,87 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="openlambda">
-<h1>OpenLambda<a class="headerlink" href="#openlambda" title="Link to this heading">#</a></h1>
-<a class="reference external image-reference" href="https://opensource.org/licenses/Apache-2.0"><img alt="Apache 2.0 License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" />
-</a>
-<p>Open-Lambda is an <strong>Apache-licensed serverless computing project</strong>, written (mostly) in Go
-and based on Linux containers. The primary goal of OpenLambda is to enable exploration of
-new approaches to serverless computing. We hope to eventually make it suitable for use in
-production as well.</p>
-<p>The main system implemented so far is a <strong>single-node OpenLambda worker</strong> that can take
-HTTP requests and invoke lambdas locally to compute responses.</p>
-<p>You can read more about the OpenLambda worker <a class="reference external" href="https://github.com/open-lambda/open-lambda/blob/main/docs/worker.md">here</a>
-or just get started by <a class="reference external" href="https://github.com/open-lambda/open-lambda/blob/main/docs/quickstart.md">deploying a worker</a>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>We are currently working on a <strong>cluster mode</strong>, where a pool of VMs running the worker
-service are managed by a centralized OpenLambda boss. With a bit of work, you could also
-manually deploy workers yourself and put an HTTP load balancer in front of them.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="worker">
+<h1>Worker<a class="headerlink" href="#worker" title="Link to this heading">#</a></h1>
+<p>The OpenLambda <strong>worker</strong> is the core server-side component of a node. It listens for
+incoming HTTP requests, manages container lifecycle, and returns responses to callers.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>Each worker is a standalone Go binary that exposes a single HTTP endpoint:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">POST</span> <span class="o">/</span><span class="n">runLambda</span><span class="o">/&lt;</span><span class="k">lambda</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
 </div>
-<hr class="docutils" />
-<section id="related-publications">
-<h2>Related Publications<a class="headerlink" href="#related-publications" title="Link to this heading">#</a></h2>
+<p>When a request arrives the worker:</p>
+<ol class="arabic simple">
+<li><p>Checks whether the lambda’s container image is already present on the node; if not, pulls it from the registry.</p></li>
+<li><p>Starts a Linux container from the image.</p></li>
+<li><p>Passes the request payload to the lambda function running inside the container.</p></li>
+<li><p>Waits for the function to return a result, then forwards that result back to the caller.</p></li>
+<li><p>Optionally keeps the container warm for a short period to reduce cold-start latency on subsequent calls.</p></li>
+</ol>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">#</a></h2>
+<p>The worker is configured via a JSON file (default <code class="docutils literal notranslate"><span class="pre">config.json</span></code>) in the working directory.
+Key fields:</p>
 <div class="pst-scrollable-table-container"><table class="table">
-<colgroup>
-<col style="width: 60.0%" />
-<col style="width: 30.0%" />
-<col style="width: 10.0%" />
-</colgroup>
 <thead>
-<tr class="row-odd"><th class="head"><p>Title</p></th>
-<th class="head"><p>Authors</p></th>
-<th class="head"><p>Venue</p></th>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/open-lambda/open-lambda"><strong>Forklift: Fitting Zygote Trees for Faster Package Initialization</strong></a></p></td>
-<td><p>Yang et al.</p></td>
-<td><p>WoSC ‘24</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">worker_port</span></code></p></td>
+<td><p>Port the HTTP server listens on</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">8080</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.usenix.org/conference/atc18/presentation/oakes"><strong>SOCK: Rapid Task Provisioning with Serverless-Optimized Containers</strong></a></p></td>
-<td><p>Oakes et al.</p></td>
-<td><p>ATC ‘18</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">registry</span></code></p></td>
+<td><p>URL of the lambda registry</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/open-lambda/open-lambda"><strong>Pipsqueak: Lean Lambdas with Large Libraries</strong></a></p></td>
-<td><p>Oakes et al.</p></td>
-<td><p>ICDCSW ‘17</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sandbox</span></code></p></td>
+<td><p>Container backend (<code class="docutils literal notranslate"><span class="pre">docker</span></code> or <code class="docutils literal notranslate"><span class="pre">sock</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">docker</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.usenix.org/publications/login/fall-2016-vol-41-no-3/hendrickson"><strong>Serverless Computation with OpenLambda</strong></a></p></td>
-<td><p>Hendrickson et al.</p></td>
-<td><p>;login ‘16</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.usenix.org/conference/hotcloud16/workshop-program/presentation/hendrickson"><strong>Serverless Computation with OpenLambda</strong></a></p></td>
-<td><p>Hendrickson et al.</p></td>
-<td><p>HotCloud ‘16</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">log_output</span></code></p></td>
+<td><p>Where to write logs (<code class="docutils literal notranslate"><span class="pre">stdout</span></code> or a file path)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">stdout</span></code></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
-<hr class="docutils" />
-<section id="license">
-<h2>License<a class="headerlink" href="#license" title="Link to this heading">#</a></h2>
-<p>This project is licensed under the <strong>Apache License</strong> — see the
-<a class="reference external" href="https://github.com/open-lambda/open-lambda/blob/main/LICENSE">LICENSE.md</a> file for details.</p>
-</section>
-<div class="toctree-wrapper compound">
+<section id="starting-the-worker">
+<h2>Starting the Worker<a class="headerlink" href="#starting-the-worker" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># From the repo root after building:</span>
+./bin/worker<span class="w"> </span>--config<span class="w"> </span>config.json
+</pre></div>
 </div>
+<p>The worker prints its listening address on startup. You can verify it is running with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-w<span class="w"> </span><span class="s2">&quot;\n&quot;</span><span class="w"> </span>localhost:8080/status
+</pre></div>
+</div>
+</section>
+<section id="deploying-multiple-workers">
+<h2>Deploying Multiple Workers<a class="headerlink" href="#deploying-multiple-workers" title="Link to this heading">#</a></h2>
+<p>Workers are stateless with respect to routing — each one operates independently. To scale
+horizontally, start one worker process per node and place a standard HTTP load balancer
+(Nginx, HAProxy, or similar) in front of them. No coordination between workers is required.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A centralized <strong>boss</strong> component for cluster-wide management is currently under development.
+Until then, manual deployment behind a load balancer is the recommended approach for
+multi-node setups.</p>
+</div>
+</section>
+<section id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="#doc.htm"><span class="xref myst">Quickstart guide</span></a> — get a single worker running locally in minutes</p></li>
+<li><p><a class="reference external" href="https://www.usenix.org/conference/atc18/presentation/oakes">SOCK: Rapid Task Provisioning with Serverless-Optimized Containers</a> — the research paper describing the container backend.</p></li>
+</ul>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -428,14 +442,14 @@ manually deploy workers yourself and put an HTTP load balancer in front of them.
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="right-next"
-       href="worker.html"
-       title="next page">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Worker</p>
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">OpenLambda</p>
       </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -453,8 +467,11 @@ manually deploy workers yourself and put an HTTP load balancer in front of them.
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#related-publications">Related Publications</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration">Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#starting-the-worker">Starting the Worker</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deploying-multiple-workers">Deploying Multiple Workers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
 </ul>
   </nav></div>
 

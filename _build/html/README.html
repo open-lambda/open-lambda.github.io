@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -165,7 +165,10 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="worker.html">Worker</a></li>
+</ul>
+
     </div>
 </nav></div>
     </div>
@@ -314,12 +317,9 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-structure">File Structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#one-time-setup-do-this-once-per-repo">One-Time Setup (do this once per repo)</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clone-the-repo-and-copy-these-files-in">1. Clone the repo and copy these files in</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enable-github-pages-with-github-actions-as-the-source">2. Enable GitHub Pages with GitHub Actions as the source</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#local-preview">Local Preview</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-more-pages">Adding More Pages</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">Troubleshooting</a></li>
 </ul>
             </nav>
         </div>
@@ -334,7 +334,7 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="openlambda-github-pages-myst-markdown-site">
 <h1>OpenLambda GitHub Pages — MyST Markdown Site<a class="headerlink" href="#openlambda-github-pages-myst-markdown-site" title="Link to this heading">#</a></h1>
 <p>This repo deploys automatically to GitHub Pages using <a class="reference external" href="https://jupyterbook.org">Jupyter Book</a>
-with <a class="reference external" href="https://myst-parser.readthedocs.io/">MyST Markdown</a>.</p>
+with <a class="reference external" href="https://myst-parser.readthedocs.io/">MyST Markdown</a> as the technical documentation of Open Lambda.</p>
 <hr class="docutils" />
 <section id="file-structure">
 <h2>File Structure<a class="headerlink" href="#file-structure" title="Link to this heading">#</a></h2>
@@ -365,18 +365,7 @@ git<span class="w"> </span>push
 </pre></div>
 </div>
 </section>
-<section id="enable-github-pages-with-github-actions-as-the-source">
-<h3>2. Enable GitHub Pages with GitHub Actions as the source<a class="headerlink" href="#enable-github-pages-with-github-actions-as-the-source" title="Link to this heading">#</a></h3>
-<p>Go to the repo on GitHub:</p>
-<ol class="arabic simple">
-<li><p><strong>Settings</strong> → <strong>Pages</strong> (left sidebar)</p></li>
-<li><p>Under <strong>Source</strong>, select <strong>GitHub Actions</strong> (not “Deploy from a branch”)</p></li>
-<li><p>Save</p></li>
-</ol>
-<p>That’s it. Every push to <code class="docutils literal notranslate"><span class="pre">main</span></code> will now rebuild and redeploy the site automatically.</p>
 </section>
-</section>
-<hr class="docutils" />
 <section id="local-preview">
 <h2>Local Preview<a class="headerlink" href="#local-preview" title="Link to this heading">#</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
@@ -384,49 +373,6 @@ jupyter-book<span class="w"> </span>build<span class="w"> </span>.
 <span class="c1"># Open in browser:</span>
 open<span class="w"> </span>_build/html/index.html
 </pre></div>
-</div>
-</section>
-<hr class="docutils" />
-<section id="adding-more-pages">
-<h2>Adding More Pages<a class="headerlink" href="#adding-more-pages" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p>Create a new <code class="docutils literal notranslate"><span class="pre">.md</span></code> file, e.g. <code class="docutils literal notranslate"><span class="pre">worker.md</span></code></p></li>
-<li><p>Add it to <code class="docutils literal notranslate"><span class="pre">_toc.yml</span></code>:</p></li>
-</ol>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jb-book</span>
-<span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">index</span>
-<span class="nt">chapters</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">worker</span>
-</pre></div>
-</div>
-<ol class="arabic simple" start="3">
-<li><p>Push — the site rebuilds automatically.</p></li>
-</ol>
-</section>
-<hr class="docutils" />
-<section id="troubleshooting">
-<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Problem</p></th>
-<th class="head"><p>Fix</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Build fails: <code class="docutils literal notranslate"><span class="pre">jupyter-book</span> <span class="pre">not</span> <span class="pre">found</span></code></p></td>
-<td><p>Make sure <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> lists <code class="docutils literal notranslate"><span class="pre">jupyter-book&gt;=1.0.0</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>Pages shows 404</p></td>
-<td><p>Confirm <strong>Settings → Pages → Source</strong> is set to <strong>GitHub Actions</strong></p></td>
-</tr>
-<tr class="row-even"><td><p>Old content still showing</p></td>
-<td><p>Hard-refresh browser (<code class="docutils literal notranslate"><span class="pre">Ctrl+Shift+R</span></code>) or wait ~1 min for CDN</p></td>
-</tr>
-<tr class="row-odd"><td><p>Action fails with permissions error</p></td>
-<td><p>Go to <strong>Settings → Actions → General → Workflow permissions</strong> and enable “Read and write permissions”</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 </section>
 </section>
@@ -480,12 +426,9 @@ open<span class="w"> </span>_build/html/index.html
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-structure">File Structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#one-time-setup-do-this-once-per-repo">One-Time Setup (do this once per repo)</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clone-the-repo-and-copy-these-files-in">1. Clone the repo and copy these files in</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enable-github-pages-with-github-actions-as-the-source">2. Enable GitHub Pages with GitHub Actions as the source</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#local-preview">Local Preview</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-more-pages">Adding More Pages</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">Troubleshooting</a></li>
 </ul>
   </nav></div>
 

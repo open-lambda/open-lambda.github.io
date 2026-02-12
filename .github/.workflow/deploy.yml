@@ -1,54 +1,30 @@
-name: Deploy MyST Book to GitHub Pages
+name: Deploy Jupyter Book
 
 on:
-  # Trigger on every push to main
   push:
-    branches: ["master"]
-  # Allow manual triggers from the Actions tab
-  workflow_dispatch:
+    branches:
+      - main
 
-# Sets permissions so the workflow can deploy to GitHub Pages
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
-
-# Only allow one concurrent deployment; cancel in-flight runs
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
 
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: "pip"
+    steps:
+      - uses: actions/checkout@v3
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install jupyter-book
 
-      - name: Build Jupyter Book (MyST Markdown → HTML)
-        run: jupyter-book build . --all
+      - name: Build the book
+        run: jupyter-book build .
 
-      - name: Upload artifact for Pages
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: "./_build/html"
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_build/html

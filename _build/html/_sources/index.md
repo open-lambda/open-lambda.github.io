@@ -12,7 +12,7 @@ myst:
 :target: https://opensource.org/licenses/Apache-2.0
 ```
 
-OpenLambda is an **Apache-licensed serverless computing project**, written (mostly) in Go
+Open-Lambda is an **Apache-licensed serverless computing project**, written (mostly) in Go
 and based on Linux containers. The primary goal of OpenLambda is to enable exploration of
 new approaches to serverless computing. We hope to eventually make it suitable for use in
 production as well.

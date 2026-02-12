@@ -1,7 +1,7 @@
 # OpenLambda GitHub Pages — MyST Markdown Site
 
 This repo deploys automatically to GitHub Pages using [Jupyter Book](https://jupyterbook.org)
-with [MyST Markdown](https://myst-parser.readthedocs.io/).
+with [MyST Markdown](https://myst-parser.readthedocs.io/) as the technical documentation of Open Lambda.
 
 ---
 
@@ -35,18 +35,6 @@ git commit -m "Add MyST Markdown Jupyter Book site"
 git push
 ```
 
-### 2. Enable GitHub Pages with GitHub Actions as the source
-
-Go to the repo on GitHub:
-
-1. **Settings** → **Pages** (left sidebar)
-2. Under **Source**, select **GitHub Actions** (not "Deploy from a branch")
-3. Save
-
-That's it. Every push to `main` will now rebuild and redeploy the site automatically.
-
----
-
 ## Local Preview
 
 ```bash
@@ -55,30 +43,3 @@ jupyter-book build .
 # Open in browser:
 open _build/html/index.html
 ```
-
----
-
-## Adding More Pages
-
-1. Create a new `.md` file, e.g. `worker.md`
-2. Add it to `_toc.yml`:
-
-```yaml
-format: jb-book
-root: index
-chapters:
-  - file: worker
-```
-
-3. Push — the site rebuilds automatically.
-
----
-
-## Troubleshooting
-
-| Problem | Fix |
-|---|---|
-| Build fails: `jupyter-book not found` | Make sure `requirements.txt` lists `jupyter-book>=1.0.0` |
-| Pages shows 404 | Confirm **Settings → Pages → Source** is set to **GitHub Actions** |
-| Old content still showing | Hard-refresh browser (`Ctrl+Shift+R`) or wait ~1 min for CDN |
-| Action fails with permissions error | Go to **Settings → Actions → General → Workflow permissions** and enable "Read and write permissions" |
