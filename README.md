@@ -35,18 +35,6 @@ git commit -m "Add MyST Markdown Jupyter Book site"
 git push
 ```
 
-### 2. Enable GitHub Pages with GitHub Actions as the source
-
-Go to the repo on GitHub:
-
-1. **Settings** → **Pages** (left sidebar)
-2. Under **Source**, select **GitHub Actions** (not "Deploy from a branch")
-3. Save
-
-That's it. Every push to `main` will now rebuild and redeploy the site automatically.
-
----
-
 ## Local Preview
 
 ```bash
@@ -54,18 +42,4 @@ pip install -r requirements.txt
 jupyter-book build .
 # Open in browser:
 open _build/html/index.html
-```
-
----
-
-## Adding More Pages
-
-1. Create a new `.md` file, e.g. `worker.md`
-2. Add it to `_toc.yml`:
-
-```yaml
-format: jb-book
-root: index
-chapters:
-  - file: worker
 ```
