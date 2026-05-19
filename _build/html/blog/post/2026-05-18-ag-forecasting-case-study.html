@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -339,53 +339,6 @@
 
 
 
-
-
-<div class="dropdown dropdown-source-buttons">
-  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
-    <i class="fab fa-github"></i>
-  </button>
-  <ul class="dropdown-menu">
-      
-      
-      
-      <li><a href="https://github.com/open-lambda/open-lambda.github.io" target="_blank"
-   class="btn btn-sm btn-source-repository-button dropdown-item"
-   title="Source repository"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-<span class="btn__text-container">Repository</span>
-</a>
-</li>
-      
-      
-      
-      
-      <li><a href="https://github.com/open-lambda/open-lambda.github.io/issues/new?title=Issue%20on%20page%20%2Fblog/post/2026-05-18-ag-forecasting-case-study.html&body=Your%20issue%20content%20here." target="_blank"
-   class="btn btn-sm btn-source-issues-button dropdown-item"
-   title="Open an issue"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="btn__text-container">Open issue</span>
-</a>
-</li>
-      
-  </ul>
-</div>
-
-
-
-
 <button onclick="toggleFullScreen()"
   class="btn btn-sm btn-fullscreen-button"
   title="Fullscreen mode"
@@ -419,7 +372,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -435,6 +390,23 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background-agricultural-forecasting-api">Background: Agricultural Forecasting API</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#porting-to-openlambda">Porting to OpenLambda</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-1-file-management">Challenge 1: File Management</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-2-package-management">Challenge 2: Package Management</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-3-deployment">Challenge 3: Deployment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-4-asynchronous-execution">Challenge 4: Asynchronous Execution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-5-worker-pools">Challenge 5: Worker Pools</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recap-of-new-features">Recap of New Features</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -450,6 +422,105 @@ document.write(`
 <p>Our goal is to make an ever-growing set of applications deployable on OpenLambda (OL), with minimal modifications. We believe the best way to work towards this goal is to pick interesting applications that weren’t originally designed for serverless deployment, try to port them to OL, and identify pain points. This helps us identify the most useful features to add to OL, to support similar deployments.</p>
 <p>Recently, we selected an agricultural forecasting application (AgForecast), developed by the <a class="reference external" href="https://dsi.wisc.edu/">Data Science Institute at UW–Madison</a>, to port to OpenLambda: <a class="github reference external" href="https://github.com/UW-Madison-DSI/ag_forecasting_api">UW-Madison-DSI/ag_forecasting_api</a>. AgForecast is an interesting case study, because it implements its REST API using FastAPI, which in turn uses <a class="reference external" href="https://asgi.readthedocs.io/en/latest/">ASGI</a>, the so-called “spiritual successor” to WSGI, which we recently started supporting in OpenLambda. WSGI is the basis for popular Python web-programming packages such as Django and Flask; new ASGI support opens the door to an even broader range of applications.</p>
 <p>In this post, we describe the challenges of porting AgForecast to OL, and four new features we added to OL to make deployment of similar applications in the future simpler. The features are built-in ASGI support, direct GitHub-to-OL deployments, OL function environment variables, and OL-based pip compilation.</p>
+<section id="background-agricultural-forecasting-api">
+<h2>Background: Agricultural Forecasting API<a class="headerlink" href="#background-agricultural-forecasting-api" title="Link to this heading">#</a></h2>
+<p><strong>Motivation.</strong> The agricultural forecasting app is an open-source tool designed to address farmers’ needs in a customizable way. We first built a backend infrastructure using FastAPI to serve crop disease forecasting models for corn and soybean, focusing on integration with Wisconet weather stations and on-demand model serving. We then developed a custom R Shiny front-end interface for farmer use.</p>
+<p><strong>Fit with OpenLambda.</strong> We began exploring OpenLambda to leverage the benefits of serverless technology. Hosting our tool on this platform offers significant value not only to the developer community, but also to plant pathology practitioners and scientists who want to build on robust, nationwide infrastructure.</p>
+<p><strong>Technical overview.</strong> The Ag Forecasting API is a FastAPI-based backend that serves crop disease forecasting models for corn and soybean across Wisconsin. It exposes two parallel data pipelines through a unified interface: one sourced from Wisconet, the public mesonet of weather stations across the state, and another from IBM Environmental Intelligence for point-location queries by latitude and longitude. The core logic lives in the <code class="docutils literal notranslate"><span class="pre">ag_models_wrappers</span></code> module, which dynamically pulls the daily and hourly weather variables each disease model requires for a given forecasting date, runs the risk calculations, and returns localized predictions. Currently supported models include Sporecaster (white mold in soybean, with dry and irrigated row-spacing variants), Tarspotter (tar spot of corn), gray leaf spot, and frogeye leaf spot — all based on peer-reviewed plant pathology research from UW–Madison.</p>
+<p><strong>Infrastructure and integration.</strong> The project ships with a <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> and <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> for containerized deployment, and includes a Starlette <code class="docutils literal notranslate"><span class="pre">WSGIMiddleware</span></code> wrapper so the FastAPI app can also be served behind WSGI servers for legacy or mixed environments. A companion sub-package, <code class="docutils literal notranslate"><span class="pre">pywisconet</span></code>, provides a thin REST wrapper over the Wisconet v1 API with endpoints for active station discovery (<code class="docutils literal notranslate"><span class="pre">/wisconet/active_stations/</span></code>), station field metadata (<code class="docutils literal notranslate"><span class="pre">/station_fields/{station_id}</span></code>), and bulk measurement retrieval (<code class="docutils literal notranslate"><span class="pre">/bulk_measures/{station_id}</span></code>) at configurable frequencies (5-minute, hourly, or daily) for variables like air temperature, dew point, wind speed, and relative humidity. IBM credentials are handled via environment variables (<code class="docutils literal notranslate"><span class="pre">IBM_API_KEY</span></code>, <code class="docutils literal notranslate"><span class="pre">TENANT_ID</span></code>, <code class="docutils literal notranslate"><span class="pre">ORG_ID</span></code>) and validated against query parameters at request time. The API is MIT-licensed, fully open source, and currently deployed at <a class="reference external" href="https://connect.doit.wisc.edu/ag_forecasting_api">connect.doit.wisc.edu/ag_forecasting_api</a>.</p>
+</section>
+<section id="porting-to-openlambda">
+<h2>Porting to OpenLambda<a class="headerlink" href="#porting-to-openlambda" title="Link to this heading">#</a></h2>
+<p>When porting AgForecast to OL, we encountered 5 challenges related to: expectations about writable directories, package version selection, deployment from GitHub, asynchronous execution, and parallel pool execution. To overcome these challenges, we introduced four new features to OL and made minor changes to AgForecast itself.</p>
+<section id="challenge-1-file-management">
+<h3>Challenge 1: File Management<a class="headerlink" href="#challenge-1-file-management" title="Link to this heading">#</a></h3>
+<p>AgForecast is semi-stateless: data files describing stations and measurements are used across requests, but if these files are deleted, it can generate them on-the-fly from upstream data sources, such as the IBM Weather API or Wisconet. This is a good match for FaaS platforms such as OL, where lambda instances frequently persist (along with their state) across multiple invocations, even if an instance can silently be terminated at any time to reclaim memory.</p>
+<p>However, most directory locations are read-only for an OL function; the one exception is a single “scratch directory” and various other locations that are symbolic links to the scratch directory (such as <code class="docutils literal notranslate"><span class="pre">/tmp</span></code>). Full-featured sandboxes such as Docker containers use union file systems to make many directories editable, on a copy-on-write basis. OL’s limitation is due to its use of bind mounts, a leaner, but less flexible mechanism. AgForecast wasn’t originally built for OL, so we modified the code to make the directory location for station and measurement data configurable via environment variables (otherwise AgForecast attempted to write to read-only locations). We added support to OL function configuration files to support the specification of environment variables, like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">triggers</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">http</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*&quot;</span>
+<span class="nt">environment</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">MEASUREMENTS_CACHE_DIR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/host/tmp/cache</span>
+<span class="w">  </span><span class="nt">STATIONS_CACHE_FILE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/host/tmp/cache/wisconsin_stations_cache.csv</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</section>
+<section id="challenge-2-package-management">
+<h3>Challenge 2: Package Management<a class="headerlink" href="#challenge-2-package-management" title="Link to this heading">#</a></h3>
+<p>Like many Python projects, AgForecast specifies PyPI package requirements in a <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file. Also like most projects, not all version requirements are exact. Here are 3 of the 21 lines in AgForecast’s <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="n">matplotlib</span><span class="o">==</span><span class="mf">3.9.1</span>
+<span class="n">fastapi</span><span class="o">&gt;=</span><span class="mf">0.95.0</span>
+<span class="n">pydantic</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Note the different levels of specificity: <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> must be a specific version, whereas pip can select any version for <code class="docutils literal notranslate"><span class="pre">pydantic</span></code> (probably the latest, barring version conflicts based on other dependencies); <code class="docutils literal notranslate"><span class="pre">fastapi</span></code> specifies a range. Note that some of these might also have indirect dependencies on other packages not explicitly listed.</p>
+<p>OL requires exact versions for all packages, direct or indirect. For this purpose, we recommend the use of <a class="reference external" href="https://pypi.org/project/pip-tools/"><code class="docutils literal notranslate"><span class="pre">pip-compile</span></code></a> to translate a partially specified <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file to a fully specified one, based on the latest packages at the time of compilation.</p>
+<p>One challenge is that pip and pip-compile sometimes select packages based on the host environment. For example, in certain cases, the suitable Python package version for Ubuntu 24.04 might be different than for Ubuntu 26.04. Initially, we encountered this when deploying AgForecast on OL. The <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> created by doing pip-compile on the host machine was not quite compatible with the environment inside the lambda function. To address this, we created a new OL function that does pip-compile inside the OL environment. It works like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;&lt;some URL&gt;&#39;</span><span class="w"> </span>http://localhost:5000/run/pip-compile/url<span class="w"> </span>&gt;<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</section>
+<section id="challenge-3-deployment">
+<h3>Challenge 3: Deployment<a class="headerlink" href="#challenge-3-deployment" title="Link to this heading">#</a></h3>
+<p>AgForecast lives on a public GitHub repo: <a class="github reference external" href="https://github.com/UW-Madison-DSI/ag_forecasting_api/tree/main">UW-Madison-DSI/ag_forecasting_api</a>. We wanted to make it as easy as possible to deploy directly from GitHub to an OL function. Thus, we added a new <code class="docutils literal notranslate"><span class="pre">ol</span> <span class="pre">admin</span> <span class="pre">install</span></code> option to point directly to a repo:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./ol<span class="w"> </span>admin<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>ol.yaml<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>https://github.com/&lt;org&gt;/&lt;repo&gt;.git
+</pre></div>
+</div>
+</section>
+<section id="challenge-4-asynchronous-execution">
+<h3>Challenge 4: Asynchronous Execution<a class="headerlink" href="#challenge-4-asynchronous-execution" title="Link to this heading">#</a></h3>
+<p>AgForecast is built on FastAPI, which in turn is based on ASGI. ASGI is an asynchronous alternative to WSGI (Web Server Gateway Interface). The idea of WSGI is to let you mix and match servers (for example, Gunicorn, uWSGI) with application frameworks (for example, Flask, Django). The server/framework interface is minimalist, a single function signature that the server calls for each incoming HTTP request (GET/POST/etc). The framework implements the function; a common framework pattern is to route the call to a user-written handler function. For example, consider these two functions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;Home page&quot;</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/about&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">about</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;About page&quot;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">app</span></code> object is a Python callable (meaning it is an object that acts like a function); <code class="docutils literal notranslate"><span class="pre">app</span></code> implements the WSGI interface. So when a server sends a request to <code class="docutils literal notranslate"><span class="pre">app</span></code>, <code class="docutils literal notranslate"><span class="pre">app</span></code> in turn calls the correct user function (<code class="docutils literal notranslate"><span class="pre">home</span></code> or <code class="docutils literal notranslate"><span class="pre">about</span></code>) to execute and obtain a result.</p>
+<p>ASGI was introduced as an alternative to WSGI to provide more options for handling concurrent calls. Consider how (in the above Flask/WSGI example) two different users may want to visit the home and about pages at the same time. Can we handle the requests concurrently?</p>
+<p>There are a few ways to do this: multiple processes, multiple threads in a process, or <a class="reference external" href="https://peps.python.org/pep-0492/">Python’s async functionality introduced in Python 3.5 (2015)</a>. If we want all execution in a single process (useful when there is shared state), we can either use threading (with WSGI) or async (with ASGI).</p>
+<p>Threads are a non-cooperative form of scheduling, meaning that a scheduler can switch from running one thread on a CPU to another thread at any time (perhaps a very inconvenient time!). Writing multi-threaded programs is notoriously difficult, as one must identify shared state, introduce locks to protect that state, and acquire/release locks at the right points. In contrast, async offers a form of cooperative scheduling, where switches can only occur at well-defined points (e.g., an <code class="docutils literal notranslate"><span class="pre">await</span></code>). Thus, programming is simpler (no need for locks).</p>
+<p>Normally, concurrent programs allow (a) parallel execution on multiple CPU cores at the same time and (b) execution of code at the same time that input/output occurs, say to the disk or network. In many languages, threads offer both benefits and cooperative scheduling only provides the I/O benefit. However, Python threads only offer the I/O benefit due to the GIL (Global Interpreter Lock), <a class="reference external" href="https://docs.python.org/3/howto/free-threading-python.html">though this may be changing</a>. Thus, async is especially appealing in Python since it (in theory) matches threading in terms of performance benefits, and surpasses threads in terms of ease-of-programming.</p>
+<p>AgForecast implements REST calls in FastAPI, which is based on ASGI, which is the async-based alternative to WSGI. To support AgForecast, we implemented ASGI server functionality in OpenLambda. This makes OpenLambda an ASGI server implementation (in the same role as Uvicorn, Gunicorn, Daphne, etc). When a request arrives, OpenLambda uses <code class="docutils literal notranslate"><span class="pre">asyncio.run(...)</span></code> to invoke the user-provided entry point, with async send/receive callbacks. The user-provided entry-point can then be a full application, written in any ASGI-compatible framework (FastAPI, Starlette, Django/Channels, etc).</p>
+<p>A user can indicate their lambda function is an ASGI application entry point by configuring their <code class="docutils literal notranslate"><span class="pre">ol.yaml</span></code> as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">OL_ENTRY_FILE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app.py</span>
+<span class="w">  </span><span class="nt">OL_ASGI_ENTRY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+</pre></div>
+</div>
+</section>
+<section id="challenge-5-worker-pools">
+<h3>Challenge 5: Worker Pools<a class="headerlink" href="#challenge-5-worker-pools" title="Link to this heading">#</a></h3>
+<p>AgForecast indirectly uses <code class="docutils literal notranslate"><span class="pre">/dev/shm</span></code>, an in-memory file system called tmpfs. Docker containers have a <code class="docutils literal notranslate"><span class="pre">/dev/shm</span></code> mount by default; as it is frequently used for inter-process communication, its behavior is configurable via the <code class="docutils literal notranslate"><span class="pre">--ipc</span></code> flag. In contrast, OL functions do not have any <code class="docutils literal notranslate"><span class="pre">/dev/shm</span></code> mount.</p>
+<p>Why does AgForecast need <code class="docutils literal notranslate"><span class="pre">/dev/shm</span></code>? AgForecast uses a <code class="docutils literal notranslate"><span class="pre">concurrent.futures.ProcessPoolExecutor</span></code> to run a Python compute-heavy function called <code class="docutils literal notranslate"><span class="pre">compute_risks</span></code> in parallel over different chunks of data. <code class="docutils literal notranslate"><span class="pre">ProcessPoolExecutor</span></code> creates different Python processes for different chunks of work, which is desirable as a way to get around Python’s per-process GIL (Global Interpreter Lock), which is held whenever regular Python code is being executed. With multiple processes (created by the pool), each process will have its own GIL that it holds during execution; thus, multiple processes can hold their own locks at the same time and execute on multiple CPU cores in parallel.</p>
+<p>As a fix to get AgForecast working as an OL function, we replaced <code class="docutils literal notranslate"><span class="pre">ProcessPoolExecutor</span></code> with a <code class="docutils literal notranslate"><span class="pre">ThreadPoolExecutor</span></code>; this avoids inter-process communication via <code class="docutils literal notranslate"><span class="pre">/dev/shm</span></code> because coordination occurs within a process, between threads. Unfortunately, all the threads share a GIL, so the performance benefits of using a pool for parallelism is lost in this case (the only value would be if <code class="docutils literal notranslate"><span class="pre">compute_risks</span></code> were I/O heavy, which it is not).</p>
+<p>Using a <code class="docutils literal notranslate"><span class="pre">ThreadPoolExecutor</span></code> works as a short term fix, but this experience suggests that eventually adding <code class="docutils literal notranslate"><span class="pre">/dev/shm</span></code> availability (and thus <code class="docutils literal notranslate"><span class="pre">ProcessPoolExecutor</span></code> functionality) would be a useful future feature for OL.</p>
+</section>
+</section>
+<section id="recap-of-new-features">
+<h2>Recap of New Features<a class="headerlink" href="#recap-of-new-features" title="Link to this heading">#</a></h2>
+<p>Porting real, complex applications to serverless platforms highlights the most important features to develop. In this post, we described 5 challenges we encountered when porting AgForecast to OL, and the following features we added to better support similar applications:</p>
+<ul class="simple">
+<li><p>environment variable configuration for lambda functions (challenge 1)</p></li>
+<li><p>pip-compile as a lambda function (challenge 2)</p></li>
+<li><p>direct GitHub deployment (challenge 3)</p></li>
+<li><p>ASGI support (challenge 4)</p></li>
+</ul>
+<p>We also made some minor changes to AgForecast:</p>
+<ul class="simple">
+<li><p>customizable directory use for stations/measurements (challenge 1)</p></li>
+<li><p>use of a thread pool instead of a process pool (challenge 5)</p></li>
+</ul>
+<p>The second change suggests a future possible OL feature: adding <code class="docutils literal notranslate"><span class="pre">/dev/shm</span></code> availability to support process pools.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -508,6 +579,30 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background-agricultural-forecasting-api">Background: Agricultural Forecasting API</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#porting-to-openlambda">Porting to OpenLambda</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-1-file-management">Challenge 1: File Management</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-2-package-management">Challenge 2: Package Management</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-3-deployment">Challenge 3: Deployment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-4-asynchronous-execution">Challenge 4: Asynchronous Execution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-5-worker-pools">Challenge 5: Worker Pools</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recap-of-new-features">Recap of New Features</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
