@@ -11,6 +11,3 @@ chapters:
       - file: applications/ag-forecasting-api
   - file: blog/index
     title: Blog
-    sections:
-      - file: blog/post/2026-05-18-hello-world
-      - file: blog/post/2026-05-18-agforecast-case-study

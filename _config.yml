@@ -7,6 +7,9 @@ logo: _static/open-lambda.png
 execute:
   execute_notebooks: "off"
 
+# Files Sphinx should ignore (keeps the GitHub README out of the toctree warning)
+exclude_patterns: [README.md]
+
 # HTML-specific settings
 html:
   use_issues_button: true
@@ -49,9 +52,6 @@ sphinx:
     html_theme: "sphinx_book_theme"
     html_show_sourcelink: false
     html_theme_options:
-      repository_url: "https://github.com/open-lambda/open-lambda.github.io"
-      use_issues_button: true
-      use_repository_button: true
       use_download_button: false
       navigation_depth: 2
       show_navbar_depth: 1
@@ -66,6 +66,12 @@ sphinx:
       open-lambda:
         - "OpenLambda Team"
         - "https://open-lambda.org"
+      maria-oros:
+        - "Maria Oros"
+        - ""
+      tyler-caraza-harter:
+        - "Tyler Caraza-Harter"
+        - ""
     blog_default_author: open-lambda
     blog_feed_archives: true
     post_date_format: "%Y-%m-%d"

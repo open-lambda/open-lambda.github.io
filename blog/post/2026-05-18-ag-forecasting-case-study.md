@@ -1,7 +1,7 @@
 ---
 blogpost: true
 date: 2026-05-18
-author: Maria Oros, Tyler Caraza-Harter
+author: maria-oros, tyler-caraza-harter
 category: Case Studies
 tags: case-study, agforecast, asgi, fastapi, openlambda
 language: en
