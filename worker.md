@@ -58,5 +58,5 @@ multi-node setups.
 
 ## Further Reading
 
-- [Quickstart guide](https://github.com/open-lambda/open-lambda/blob/main/docs/quickstart.md) — get a single worker running locally in minutes
+- [Quickstart guide](https://github.com/open-lambda/open-lambda/blob/main/docs/worker/getting-started.md) — get a single worker running locally in minutes
 - [SOCK: Rapid Task Provisioning with Serverless-Optimized Containers](https://www.usenix.org/conference/atc18/presentation/oakes) — the research paper describing the container backend.

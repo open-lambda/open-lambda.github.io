@@ -20,8 +20,8 @@ production as well.
 The main system implemented so far is a **single-node OpenLambda worker** that can take
 HTTP requests and invoke lambdas locally to compute responses.
 
-You can read more about the OpenLambda worker [here](https://github.com/open-lambda/open-lambda/blob/main/docs/worker.md)
-or just get started by [deploying a worker](https://github.com/open-lambda/open-lambda/blob/main/docs/quickstart.md).
+You can read more about the OpenLambda worker [here](https://github.com/open-lambda/open-lambda/blob/main/docs/worker/README.md)
+or just get started by [deploying a worker](https://github.com/open-lambda/open-lambda/blob/main/docs/worker/getting-started.md).
 
 ```{note}
 We are currently working on a **cluster mode**, where a pool of VMs running the worker
@@ -40,7 +40,7 @@ manually deploy workers yourself and put an HTTP load balancer in front of them.
 * - Title
   - Authors
   - Venue
-* - [**Forklift: Fitting Zygote Trees for Faster Package Initialization**](https://github.com/open-lambda/open-lambda)
+* - [**Forklift: Fitting Zygote Trees for Faster Package Initialization**](https://dl.acm.org/doi/10.1145/3702634.3702952)
   - Yang et al.
   - WoSC '24
 * - [**SOCK: Rapid Task Provisioning with Serverless-Optimized Containers**](https://www.usenix.org/conference/atc18/presentation/oakes)
