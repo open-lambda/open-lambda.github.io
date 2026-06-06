@@ -49,6 +49,7 @@ sphinx:
   extra_extensions:
     - ablog
     - sphinxext.opengraph
+    - notfound.extension
   config:
     html_theme: "sphinx_book_theme"
     html_show_sourcelink: false
@@ -59,10 +60,15 @@ sphinx:
     ogp_site_name: "OpenLambda"
     ogp_image: "https://open-lambda.github.io/_static/open-lambda.png"
     ogp_use_first_image: true
+
+    # ---- Custom 404 page ----
+    # This is a root (user/org) Pages site, so served from "/".
+    notfound_urls_prefix: "/"
     html_theme_options:
       use_download_button: false
       navigation_depth: 2
       show_navbar_depth: 1
+      announcement: "🚧 OpenLambda is a research project under active development — <a href='https://github.com/open-lambda/open-lambda'>follow along on GitHub</a>."
       logo:
         text: "OpenLambda"
 
