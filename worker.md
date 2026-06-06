@@ -1,3 +1,10 @@
+---
+myst:
+  html_meta:
+    description: "The OpenLambda worker — the core node component that handles HTTP requests, manages containers, and scales horizontally."
+    keywords: "OpenLambda, worker, serverless, Linux containers, HTTP, configuration"
+---
+
 # Worker
 
 The OpenLambda **worker** is the core server-side component of a node. It listens for

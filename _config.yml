@@ -8,7 +8,7 @@ execute:
   execute_notebooks: "off"
 
 # Files Sphinx should ignore (keeps the GitHub README out of the toctree warning)
-exclude_patterns: [README.md]
+exclude_patterns: [README.md, CONTRIBUTING.md]
 
 # HTML-specific settings
 html:
@@ -48,9 +48,17 @@ parse:
 sphinx:
   extra_extensions:
     - ablog
+    - sphinxext.opengraph
   config:
     html_theme: "sphinx_book_theme"
     html_show_sourcelink: false
+    html_favicon: "_static/open-lambda.png"
+
+    # ---- Open Graph / social-card metadata ----
+    ogp_site_url: "https://open-lambda.github.io/"
+    ogp_site_name: "OpenLambda"
+    ogp_image: "https://open-lambda.github.io/_static/open-lambda.png"
+    ogp_use_first_image: true
     html_theme_options:
       use_download_button: false
       navigation_depth: 2

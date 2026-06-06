@@ -5,6 +5,10 @@ author: maria-oros, tyler-caraza-harter
 category: Case Studies
 tags: case-study, agforecast, asgi, fastapi, openlambda
 language: en
+myst:
+  html_meta:
+    description: "Porting a FastAPI/ASGI application to OpenLambda — five challenges and the four platform features they drove."
+    keywords: "OpenLambda, serverless, FastAPI, ASGI, WSGI, pip-compile, case study"
 ---
 
 # An Application Case Study: Forecasting Crop Disease with OpenLambda

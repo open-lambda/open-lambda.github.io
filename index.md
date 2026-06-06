@@ -20,8 +20,8 @@ production as well.
 The main system implemented so far is a **single-node OpenLambda worker** that can take
 HTTP requests and invoke lambdas locally to compute responses.
 
-You can read more about the OpenLambda worker [here](https://github.com/open-lambda/open-lambda/blob/main/docs/worker.md)
-or just get started by [deploying a worker](https://github.com/open-lambda/open-lambda/blob/main/docs/quickstart.md).
+You can read more about the OpenLambda worker on the [Worker page](worker.md), or just get
+started by [deploying a worker](https://github.com/open-lambda/open-lambda/blob/main/docs/quickstart.md).
 
 ```{note}
 We are currently working on a **cluster mode**, where a pool of VMs running the worker
