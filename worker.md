@@ -43,7 +43,8 @@ The worker supports three kinds of triggers:
 
 OpenLambda is actively tested on **Ubuntu 24.04 LTS**, requires **cgroups v2**, and relies on
 operations that need root privilege. After installing the
-[dependencies](https://github.com/open-lambda/open-lambda/blob/main/docs/worker/getting-started.md#dependencies),
+dependencies listed in the
+[getting-started guide](https://github.com/open-lambda/open-lambda/blob/main/docs/worker/getting-started.md),
 build the Python-only ("min") deployment:
 
 ```bash

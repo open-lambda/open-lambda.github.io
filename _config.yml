@@ -64,6 +64,20 @@ sphinx:
     # ---- Custom 404 page ----
     # This is a root (user/org) Pages site, so served from "/".
     notfound_urls_prefix: "/"
+
+    # ---- Link checking ----
+    # usenix.org returns 403 to automated checkers (bot protection) but the
+    # links resolve fine in a browser, so skip them in linkcheck.
+    linkcheck_ignore:
+      - "https://www\\.usenix\\.org/.*"
+    # GitHub blob pages render heading anchors with client-side JS that
+    # linkcheck can't see; don't fail on missing anchors there.
+    linkcheck_anchors_ignore_for_url:
+      - "https://github\\.com/.*"
+    # Keep linkcheck fast: cap retries and how long we wait out a rate limit.
+    linkcheck_timeout: 15
+    linkcheck_retries: 1
+    linkcheck_rate_limit_timeout: 30
     html_theme_options:
       use_download_button: false
       navigation_depth: 2

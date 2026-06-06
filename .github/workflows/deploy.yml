@@ -39,11 +39,6 @@ jobs:
       - name: Build Jupyter Book
         run: jupyter-book build . --warningiserror
 
-      - name: Check links
-        # Informational: external links can be flaky, so this never blocks the build.
-        continue-on-error: true
-        run: jupyter-book build . --builder linkcheck
-
       - name: Setup Pages
         if: github.event_name == 'push'
         uses: actions/configure-pages@v6
@@ -53,6 +48,25 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: _build/html
+
+  # Link checking runs independently and never blocks the build or deploy:
+  # external links can be flaky or rate-limit automated checkers.
+  linkcheck:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check links
+        run: jupyter-book build . --builder linkcheck
 
   deploy:
     needs: build
