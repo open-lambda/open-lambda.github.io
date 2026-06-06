@@ -1,5 +1,8 @@
-jupyter-book>=1.0.0
-sphinx-book-theme>=1.1.0
-myst-parser>=3.0.0
-sphinx-copybutton
-ablog>=0.11
+# Pinned to the Jupyter Book v1 (Sphinx-based) stack used by this site.
+# Do NOT bump jupyter-book to 2.x: v2 is a MyST-CLI rewrite incompatible
+# with this repo's _config.yml / _toc.yml and sphinx_book_theme setup.
+jupyter-book==1.0.4.post1
+sphinx-book-theme==1.1.3
+myst-parser==3.0.1
+sphinx-copybutton==0.5.2
+ablog==0.11.13

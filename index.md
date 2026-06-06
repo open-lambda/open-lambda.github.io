@@ -31,6 +31,36 @@ manually deploy workers yourself and put an HTTP load balancer in front of them.
 
 ---
 
+## Explore
+
+::::{grid} 1 1 3 3
+:gutter: 3
+
+:::{grid-item-card} 🛠️ The Worker
+:link: worker
+:link-type: doc
+
+The core server-side component — how it handles HTTP requests, manages containers, and scales horizontally.
+:::
+
+:::{grid-item-card} 📦 Applications
+:link: applications/index
+:link-type: doc
+
+Real-world workloads ported to OpenLambda, and the platform features their needs drove.
+:::
+
+:::{grid-item-card} 📰 Blog
+:link: blog/index
+:link-type: doc
+
+Release notes, performance experiments, and design deep-dives from the project.
+:::
+
+::::
+
+---
+
 ## Related Publications
 
 ```{list-table}

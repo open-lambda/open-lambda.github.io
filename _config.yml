@@ -68,10 +68,10 @@ sphinx:
         - "https://open-lambda.org"
       maria-oros:
         - "Maria Oros"
-        - ""
+        - "https://dsi.wisc.edu/staff/oros-maria/"
       tyler-caraza-harter:
         - "Tyler Caraza-Harter"
-        - ""
+        - "https://www.cs.wisc.edu/staff/harter-tyler-2/"
     blog_default_author: open-lambda
     blog_feed_archives: true
     post_date_format: "%Y-%m-%d"
